@@ -3,6 +3,9 @@ import morgan from "morgan";
 import cors from "cors";
 import helmet from "helmet";
 import healthRoutes from "./routes/health.routes.js";
+import roleRoutes from "./routes/role.routes.js";
+import statusRoutes from "./routes/status.routes.js";
+import typeRoutes from "./routes/type.routes.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
 
 const app = express();
@@ -19,6 +22,9 @@ app.get("/", (_req, res) => {
 });
 
 app.use(base_route, healthRoutes);
+app.use(base_route, roleRoutes);
+app.use(base_route, statusRoutes);
+app.use(base_route, typeRoutes);
 
 app.use(errorHandler);
 
