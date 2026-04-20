@@ -6,6 +6,7 @@ import healthRoutes from "./routes/health.routes.js";
 import roleRoutes from "./routes/role.routes.js";
 import statusRoutes from "./routes/status.routes.js";
 import typeRoutes from "./routes/type.routes.js";
+import userRoutes from "./routes/user.routes.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
 
 const app = express();
@@ -25,6 +26,7 @@ app.use(base_route, healthRoutes);
 app.use(base_route, roleRoutes);
 app.use(base_route, statusRoutes);
 app.use(base_route, typeRoutes);
+app.use(base_route, userRoutes);
 
 app.use(errorHandler);
 
