@@ -4,7 +4,7 @@
 // Get a free hosted Postgres database in seconds: `npx create-db`
 
 generator client {
-  provider = "prisma-client-js"
+  provider = "prisma-client"
   output = "../src/generated/prisma"
 }
 
@@ -80,9 +80,10 @@ model Report {
 
 model Comment {
   id_report Int
-  report Report @relation(fields: [id_report], references: [id_report])
-
   id_user Int
+  text String @db.Text
+  
+  report Report @relation(fields: [id_report], references: [id_report])
   user User @relation(fields: [id_user], references: [id_user])
 
   @@id([id_report, id_user])

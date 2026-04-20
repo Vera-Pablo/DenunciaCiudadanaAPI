@@ -2,10 +2,10 @@
   "name": "denunciaciudadanaapi",
   "version": "1.0.0",
   "description": "",
-  "main": "./src/main.ts",
+  "main": "./index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "npx tsx --watch ./src/main.ts"
+    "dev": "tsx watch ./src/server.ts"
   },
   "repository": {
     "type": "git",
@@ -24,14 +24,16 @@
     "@prisma/client": "^7.6.0",
     "dotenv": "^17.4.1",
     "express": "^5.2.1",
+    "morgan": "^1.10.1",
     "pg": "^8.20.0"
   },
   "devDependencies": {
     "@types/express": "^5.0.6",
+    "@types/morgan": "^1.9.10",
     "@types/node": "^25.5.2",
     "@types/pg": "^8.20.0",
     "prisma": "^7.6.0",
     "tsx": "^4.21.0",
-    "typescript": "^6.0.2"
+    "typescript": "^6.0.3"
   }
 }
