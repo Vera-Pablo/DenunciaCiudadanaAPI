@@ -12,8 +12,7 @@ server.listen(PORT, async () => {
     console.log("Conexión a la BD establecida!");
     console.log(`Servidor corriendo en http://localhost:${PORT}`);
   } catch (err) {
-    console.log("Error al contectar con la DB:", err);
-  } finally {
-    prisma.$disconnect();
+    console.log("Error al conectar con la DB:", err);
+    process.exit(1);
   }
 });
