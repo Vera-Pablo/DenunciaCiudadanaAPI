@@ -79,13 +79,15 @@ model Report {
 }
 
 model Comment {
-  id_report Int
-  id_user Int
+  id_comment Int @id @default(autoincrement())
   text String @db.Text
-  
+  date DateTime @default(now())
+
+  id_report Int
   report Report @relation(fields: [id_report], references: [id_report])
+
+  id_user Int
   user User @relation(fields: [id_user], references: [id_user])
 
-  @@id([id_report, id_user])
   @@map("comment")
 }
