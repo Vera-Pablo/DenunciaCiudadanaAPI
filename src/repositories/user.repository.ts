@@ -21,12 +21,14 @@ class UserRepository {
   async getByDni(dni: number) {
     return await prisma.user.findUnique({
       where: { dni },
+      include: { role: true },
     });
   }
 
   async getByEmail(email: string) {
     return await prisma.user.findUnique({
       where: { email },
+      include: { role: true },
     });
   }
 
@@ -43,7 +45,7 @@ class UserRepository {
   async update(id: number, data: UpdateUserInput) {
     return await prisma.user.update({
       where: { id_user: id },
-      data,
+      data: data as any,
       include: { role: true },
     });
   }

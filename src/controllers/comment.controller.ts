@@ -18,7 +18,21 @@ class CommentController {
     try {
       const { id } = idParamSchema.parse(req.params);
       const validated = createCommentSchema.parse(req.body);
-      const newComment = await commentService.addComment(id, validated);
+
+      const userId = req.user?.id_user;
+      if (!userId) {
+        return res
+          .status(401)
+          .json({
+            status: "error",
+            message: "Unauthorized: User info missing in token",
+          });
+      }
+
+      const newComment = await commentService.addComment(id, {
+        ...validated,
+        id_user: userId,
+      });
       res.status(201).json({ status: "success", data: newComment });
     } catch (error) {
       next(error);

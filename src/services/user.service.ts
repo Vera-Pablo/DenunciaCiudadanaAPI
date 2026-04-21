@@ -1,3 +1,4 @@
+import bcrypt from "bcryptjs";
 import { userRepository } from "../repositories/user.repository.js";
 import { roleRepository } from "../repositories/role.repository.js";
 import type { CreateUserInput, UpdateUserInput } from "../schemas/user.schema.js";
@@ -31,7 +32,13 @@ class UserService {
       throw new Error("Provided role does not exist");
     }
 
-    return await userRepository.create(data);
+    // Hash password before saving
+    const hashedPassword = await bcrypt.hash(data.password, 10);
+
+    return await userRepository.create({
+      ...data,
+      password: hashedPassword,
+    });
   }
 
   async updateUser(id: number, data: UpdateUserInput) {
@@ -50,6 +57,11 @@ class UserService {
     if (data.id_role) {
       const role = await roleRepository.getById(data.id_role);
       if (!role) throw new Error("Provided role does not exist");
+    }
+
+    // Hash password if it's being updated
+    if (data.password) {
+      data.password = await bcrypt.hash(data.password, 10);
     }
 
     return await userRepository.update(id, data);

@@ -16,7 +16,7 @@ class ReportService {
     return report;
   }
 
-  async createReport(data: CreateReportInput) {
+  async createReport(data: CreateReportInput & { id_user: number }) {
     const tracking_num = this.generateTrackingNum();
 
     const pendingStatus = await prisma.status.findUnique({
