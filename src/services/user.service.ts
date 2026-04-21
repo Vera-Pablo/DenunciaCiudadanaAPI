@@ -1,11 +1,13 @@
 import bcrypt from "bcryptjs";
 import { userRepository } from "../repositories/user.repository.js";
 import { roleRepository } from "../repositories/role.repository.js";
+import { UserMapper } from "../utils/user.mapper.js";
 import type { CreateUserInput, UpdateUserInput } from "../schemas/user.schema.js";
 
 class UserService {
   async getAllUsers() {
-    return await userRepository.getAll();
+    const users = await userRepository.getAll();
+    return UserMapper.toSanitizedUser(users);
   }
 
   async getUserById(id: number) {
@@ -13,10 +15,10 @@ class UserService {
     if (!user) {
       throw new Error("User not found");
     }
-    return user;
+    return UserMapper.toSanitizedUser(user);
   }
 
-  async createUser(data: CreateUserInput) {
+  async createUser(data: CreateUserInput & { id_role: number }) {
     const existingDni = await userRepository.getByDni(data.dni);
     if (existingDni) {
       throw new Error("DNI already exists");
@@ -32,17 +34,19 @@ class UserService {
       throw new Error("Provided role does not exist");
     }
 
-    // Hash password before saving
     const hashedPassword = await bcrypt.hash(data.password, 10);
 
-    return await userRepository.create({
+    const newUser = await userRepository.create({
       ...data,
       password: hashedPassword,
     });
+
+    return UserMapper.toSanitizedUser(newUser);
   }
 
   async updateUser(id: number, data: UpdateUserInput) {
-    const existingUser = await this.getUserById(id);
+    const existingUser = await userRepository.getById(id);
+    if (!existingUser) throw new Error("User not found");
 
     if (data.dni && data.dni !== existingUser.dni) {
       const duplicateDni = await userRepository.getByDni(data.dni);
@@ -59,12 +63,12 @@ class UserService {
       if (!role) throw new Error("Provided role does not exist");
     }
 
-    // Hash password if it's being updated
     if (data.password) {
       data.password = await bcrypt.hash(data.password, 10);
     }
 
-    return await userRepository.update(id, data);
+    const updatedUser = await userRepository.update(id, data);
+    return UserMapper.toSanitizedUser(updatedUser);
   }
 }
 

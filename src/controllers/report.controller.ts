@@ -30,7 +30,6 @@ class ReportController {
   async create(req: Request, res: Response, next: NextFunction) {
     try {
       const validated = createReportSchema.parse(req.body);
-      // Use authenticated user ID
       const userId = req.user?.id_user;
       if (!userId) throw new Error("User not authenticated");
 

@@ -1,9 +1,26 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { userRepository } from "../repositories/user.repository.js";
-import type { LoginInput } from "../schemas/auth.schema.js";
+import { roleRepository } from "../repositories/role.repository.js";
+import { userService } from "./user.service.js";
+import { UserMapper } from "../utils/user.mapper.js";
+import type { LoginInput, RegisterInput } from "../schemas/auth.schema.js";
 
 class AuthService {
+  async register(data: RegisterInput) {
+    const roles = await roleRepository.getAll();
+    const citizenRoleObj = roles.find((r) => r.type_role === "citizen");
+
+    if (!citizenRoleObj) {
+      throw new Error("Default role 'citizen' not found in database");
+    }
+
+    return await userService.createUser({
+      ...data,
+      id_role: citizenRoleObj.id_role,
+    });
+  }
+
   async login(data: LoginInput) {
     const user = await userRepository.getByEmail(data.email);
     if (!user) {
@@ -26,8 +43,10 @@ class AuthService {
       { expiresIn: "7d" },
     );
 
-    const { password, ...sanitizedUser } = user;
-    return { user: sanitizedUser, token };
+    return {
+      user: UserMapper.toSanitizedUser(user),
+      token,
+    };
   }
 }
 
