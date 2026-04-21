@@ -6,7 +6,6 @@ export const createReportSchema = z.object({
   strike_num: z.number().int().optional(),
   img_url: z.url().max(250),
   id_type: z.number().int().positive(),
-  id_user: z.number().int().positive(),
 });
 
 export const reportQuerySchema = z.object({
