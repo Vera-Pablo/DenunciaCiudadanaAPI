@@ -7,8 +7,7 @@ class UserController {
   async list(req: Request, res: Response, next: NextFunction) {
     try {
       const users = await userService.getAllUsers();
-      const sanitized = users.map(({ password, ...rest }: any) => rest);
-      res.status(200).json({ status: "success", data: sanitized });
+      res.status(200).json({ status: "success", data: users });
     } catch (error) {
       next(error);
     }
@@ -18,8 +17,7 @@ class UserController {
     try {
       const { id } = idParamSchema.parse(req.params);
       const user = await userService.getUserById(id);
-      const { password, ...sanitized } = user;
-      res.status(200).json({ status: "success", data: sanitized });
+      res.status(200).json({ status: "success", data: user });
     } catch (error) {
       next(error);
     }
@@ -29,8 +27,7 @@ class UserController {
     try {
       const validated = createUserSchema.parse(req.body);
       const newUser = await userService.createUser(validated);
-      const { password, ...sanitized } = newUser;
-      res.status(201).json({ status: "success", data: sanitized });
+      res.status(201).json({ status: "success", data: newUser });
     } catch (error) {
       next(error);
     }
@@ -41,8 +38,7 @@ class UserController {
       const { id } = idParamSchema.parse(req.params);
       const validated = updateUserSchema.parse(req.body);
       const updatedUser = await userService.updateUser(id, validated);
-      const { password, ...sanitized } = updatedUser;
-      res.status(200).json({ status: "success", data: sanitized });
+      res.status(200).json({ status: "success", data: updatedUser });
     } catch (error) {
       next(error);
     }
