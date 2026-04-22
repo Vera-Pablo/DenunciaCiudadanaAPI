@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "report" ALTER COLUMN "img_url" DROP NOT NULL,
+ALTER COLUMN "street" SET DATA TYPE VARCHAR(100);

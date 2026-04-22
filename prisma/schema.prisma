@@ -51,7 +51,7 @@ model Report {
   id_report     Int       @id @default(autoincrement())
   tracking_num  String    @unique @db.VarChar(10)
   description   String
-  img_url       String    @db.VarChar(250)
+  img_url       String?   @db.VarChar(250)
   date          DateTime  @default(now())
   id_type       Int
   id_status     Int

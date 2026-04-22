@@ -23,6 +23,7 @@ class ReportRepository {
       include: {
         type: true,
         status: true,
+        user: { select: { name: true, email: true } },
       },
     });
   }
@@ -33,6 +34,18 @@ class ReportRepository {
       include: {
         type: true,
         status: true,
+        user: { select: { name: true, email: true } },
+      },
+    });
+  }
+
+  async updateStatus(id: number, id_status: number) {
+    return await prisma.report.update({
+      where: { id_report: id },
+      data: { status: { connect: { id_status } } },
+      include: {
+        status: true,
+        type: true,
         user: { select: { name: true, email: true } },
       },
     });
