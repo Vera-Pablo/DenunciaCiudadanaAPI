@@ -1,9 +1,12 @@
 import { z } from "zod";
 
 export const createReportSchema = z.object({
-  description: z.string().min(10),
-  strike: z.string().min(3).max(50),
-  strike_num: z.number().int().optional(),
+  description: z
+    .string()
+    .trim()
+    .min(10, "La descripción debe tener al menos 10 caracteres"),
+  street: z.string().trim().min(1, "La calle es obligatoria").max(50),
+  street_number: z.number().int().optional(),
   img_url: z.url().max(250),
   id_type: z.number().int().positive(),
 });
