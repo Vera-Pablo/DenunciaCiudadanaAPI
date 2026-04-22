@@ -20,16 +20,15 @@ class ReportService {
     const tracking_num = this.generateTrackingNum();
 
     const pendingStatus = await prisma.status.findUnique({
-      where: { type_status: "pending" },
+      where: { type_status: "Pendiente" },
     });
     if (!pendingStatus)
-      throw new Error("Default status 'pending' not found in database");
+      throw new Error("Default status 'Pendiente' not found in database");
 
     return await reportRepository.create({
       ...data,
       tracking_num,
       id_status: pendingStatus.id_status,
-      strike: data.strike || "N/A",
     });
   }
 

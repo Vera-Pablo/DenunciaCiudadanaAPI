@@ -3,8 +3,7 @@ import { prisma } from "../src/config/db.js";
 async function main() {
   console.log("Seeding database...");
 
-  // Seed Roles
-  const roles = ["citizen", "authority"];
+  const roles = ["Ciudadano", "Autoridad"];
   for (const role of roles) {
     await prisma.role.upsert({
       where: { type_role: role },
@@ -13,8 +12,7 @@ async function main() {
     });
   }
 
-  // Seed Statuses
-  const statuses = ["pending", "rejected", "attended", "completed"];
+  const statuses = ["Pendiente", "Rechazado", "Atendido", "Finalizado"];
   for (const status of statuses) {
     await prisma.status.upsert({
       where: { type_status: status },
@@ -23,7 +21,6 @@ async function main() {
     });
   }
 
-  // Seed Types
   const types = ["Vandalismo", "Alumbrado Público", "Residuos", "Seguridad", "Otros"];
   for (const type of types) {
     await prisma.type.upsert({

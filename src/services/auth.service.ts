@@ -9,10 +9,10 @@ import type { LoginInput, RegisterInput } from "../schemas/auth.schema.js";
 class AuthService {
   async register(data: RegisterInput) {
     const roles = await roleRepository.getAll();
-    const citizenRoleObj = roles.find((r) => r.type_role === "citizen");
+    const citizenRoleObj = roles.find((r) => r.type_role === "Ciudadano");
 
     if (!citizenRoleObj) {
-      throw new Error("Default role 'citizen' not found in database");
+      throw new Error("Default role 'Ciudadano' not found in database");
     }
 
     return await userService.createUser({
