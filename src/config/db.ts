@@ -1,7 +1,9 @@
 import dotenv from "dotenv";
 dotenv.config();
+import pg from "pg";
+const { Pool } = pg;
 import { PrismaPg } from "@prisma/adapter-pg";
-import { PrismaClient } from "../generated/prisma/client.js";
+import { PrismaClient } from "../generated/prisma/index.js";
 import { z } from "zod";
 
 const envSchema = z.object({
@@ -10,8 +12,11 @@ const envSchema = z.object({
 
 const env = envSchema.parse(process.env);
 
-const connectionString = env.DATABASE_URL;
-const adapter = new PrismaPg({ connectionString });
+const pool = new Pool({
+  connectionString: env.DATABASE_URL,
+});
+
+const adapter = new PrismaPg(pool);
 
 const prismaClientSingleton = () => {
   return new PrismaClient({ adapter });
