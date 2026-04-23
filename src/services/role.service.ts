@@ -8,7 +8,7 @@ class RoleService {
   async getRoleById(id: number) {
     const role = await roleRepository.getById(id);
     if (!role) {
-      throw new Error("Role not found");
+      throw new Error("Rol no encontrado");
     }
     return role;
   }
@@ -16,7 +16,7 @@ class RoleService {
   async createRole(type_role: string) {
     const existing = await roleRepository.getByType(type_role);
     if (existing) {
-      throw new Error("Role type already exists");
+      throw new Error("El tipo de rol ya existe");
     }
     return await roleRepository.create({ type_role });
   }

@@ -8,7 +8,7 @@ class TypeService {
   async getTypeById(id: number) {
     const type = await typeRepository.getById(id);
     if (!type) {
-      throw new Error("Type not found");
+      throw new Error("Tipo de denuncia no encontrado");
     }
     return type;
   }
@@ -16,7 +16,7 @@ class TypeService {
   async createType(type: string) {
     const existing = await typeRepository.getByType(type);
     if (existing) {
-      throw new Error("Type already exists");
+      throw new Error("El tipo de denuncia ya existe");
     }
     return await typeRepository.create({ type });
   }

@@ -25,7 +25,7 @@ class CommentController {
           .status(401)
           .json({
             status: "error",
-            message: "Unauthorized: User info missing in token",
+            message: "No autorizado: Falta información del usuario en el token",
           });
       }
 

@@ -17,7 +17,7 @@ class ReportService {
 
   async getReportById(id: number) {
     const report = await reportRepository.findById(id);
-    if (!report) throw new Error("Report not found");
+    if (!report) throw new Error("Denuncia no encontrada");
     return report;
   }
 
@@ -28,7 +28,7 @@ class ReportService {
       where: { type_status: "Pendiente" },
     });
     if (!pendingStatus)
-      throw new Error("Default status 'Pendiente' not found in database");
+      throw new Error("Estado por defecto 'Pendiente' no encontrado");
 
     const { id_type, id_user, ...rest } = data;
 
@@ -47,12 +47,12 @@ class ReportService {
     authorityId: number,
   ) {
     const report = await reportRepository.findById(id);
-    if (!report) throw new Error("Report not found");
+    if (!report) throw new Error("Denuncia no encontrada");
 
     const statusObj = await prisma.status.findUnique({
       where: { id_status: data.id_status },
     });
-    if (!statusObj) throw new Error("Status not found");
+    if (!statusObj) throw new Error("Estado no encontrado");
 
     const updatedReport = await reportRepository.updateStatus(
       id,
@@ -85,6 +85,10 @@ class ReportService {
       result += chars.charAt(Math.floor(Math.random() * chars.length));
     }
     return result;
+  }
+
+  async getReportsByUser(userId: number) {
+    return await reportRepository.findByUserId(userId);
   }
 }
 
