@@ -8,7 +8,7 @@ class StatusService {
   async getStatusById(id: number) {
     const status = await statusRepository.getById(id);
     if (!status) {
-      throw new Error("Status not found");
+      throw new Error("Estado no encontrado");
     }
     return status;
   }
@@ -16,7 +16,7 @@ class StatusService {
   async createStatus(type_status: string) {
     const existing = await statusRepository.getByType(type_status);
     if (existing) {
-      throw new Error("Status type already exists");
+      throw new Error("El tipo de estado ya existe");
     }
     return await statusRepository.create({ type_status });
   }

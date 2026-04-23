@@ -5,7 +5,7 @@ import type { CreateCommentInput } from "../schemas/comment.schema.js";
 class CommentService {
   async addComment(id_report: number, data: CreateCommentInput & { id_user: number }) {
     const report = await reportRepository.findById(id_report);
-    if (!report) throw new Error("Report not found");
+    if (!report) throw new Error("Denuncia no encontrada");
 
     return await commentRepository.create({
       id_report,
@@ -16,7 +16,7 @@ class CommentService {
 
   async getCommentsByReport(id_report: number) {
     const report = await reportRepository.findById(id_report);
-    if (!report) throw new Error("Report not found");
+    if (!report) throw new Error("Denuncia no encontrada");
 
     return await commentRepository.findByReportId(id_report);
   }

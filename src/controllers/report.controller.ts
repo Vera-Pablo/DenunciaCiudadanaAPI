@@ -32,7 +32,7 @@ class ReportController {
     try {
       const validated = createReportSchema.parse(req.body);
       const userId = req.user?.id_user;
-      if (!userId) throw new Error("User not authenticated");
+      if (!userId) throw new Error("Usuario no autenticado");
 
       const newReport = await reportService.createReport({
         ...validated,
@@ -49,7 +49,7 @@ class ReportController {
       const { id } = idParamSchema.parse(req.params);
       const validated = updateReportStatusSchema.parse(req.body);
       const authorityId = req.user?.id_user;
-      if (!authorityId) throw new Error("User not authenticated");
+      if (!authorityId) throw new Error("Usuario no autenticado");
 
       const result = await reportService.updateReportStatus(
         id,
@@ -57,6 +57,20 @@ class ReportController {
         authorityId,
       );
       res.status(200).json({ status: "success", data: result });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async getMyReports(req: Request, res: Response, next: NextFunction) {
+    try {
+      const userId = req.user?.id_user;
+      if (!userId) {
+        return res.status(401).json({ status: "error", message: "No autorizado: Falta el token" });
+      }
+
+      const reports = await reportService.getReportsByUser(userId);
+      res.status(200).json({ status: "success", data: reports });
     } catch (error) {
       next(error);
     }

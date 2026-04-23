@@ -12,7 +12,7 @@ class AuthService {
     const citizenRoleObj = roles.find((r) => r.type_role === "Ciudadano");
 
     if (!citizenRoleObj) {
-      throw new Error("Default role 'Ciudadano' not found in database");
+      throw new Error("Rol por defecto 'Ciudadano' no encontrado");
     }
 
     return await userService.createUser({
@@ -24,12 +24,12 @@ class AuthService {
   async login(data: LoginInput) {
     const user = await userRepository.getByEmail(data.email);
     if (!user) {
-      throw new Error("Invalid credentials");
+      throw new Error("Credenciales inválidas");
     }
 
     const isPasswordValid = await bcrypt.compare(data.password, user.password);
     if (!isPasswordValid) {
-      throw new Error("Invalid credentials");
+      throw new Error("Credenciales inválidas");
     }
 
     const secret =

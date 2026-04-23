@@ -25,7 +25,7 @@ export const authenticateToken = (
   if (!token) {
     return res
       .status(401)
-      .json({ status: "error", message: "Unauthorized: Token missing" });
+      .json({ status: "error", message: "No autorizado: Falta el token" });
   }
 
   const secret =
@@ -37,7 +37,7 @@ export const authenticateToken = (
         .status(403)
         .json({
           status: "error",
-          message: "Forbidden: Invalid or expired token",
+          message: "Prohibido: Token inválido o expirado",
         });
     }
 

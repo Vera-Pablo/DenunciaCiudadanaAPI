@@ -50,6 +50,17 @@ class ReportRepository {
       },
     });
   }
+
+  async findByUserId(userId: number) {
+    return await prisma.report.findMany({
+      where: { id_user: userId },
+      include: {
+        type: true,
+        status: true,
+      },
+      orderBy: { date: "desc" },
+    });
+  }
 }
 
 export const reportRepository = new ReportRepository();

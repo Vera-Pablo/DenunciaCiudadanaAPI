@@ -13,6 +13,7 @@ router.get(
   authorizeRoles("Autoridad"),
   reportController.getAll,
 );
+router.get("/reports/me", authenticateToken, reportController.getMyReports);
 router.get("/reports/:id", reportController.getOne);
 router.post("/reports", authenticateToken, reportController.create);
 router.patch(
