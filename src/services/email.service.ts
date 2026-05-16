@@ -111,6 +111,65 @@ class EmailService {
       console.error("[EMAIL SERVICE] Error enviando email:", error);
     }
   }
+
+  async sendPasswordResetEmail(to: string, token: string){
+    const resetUrl = `${process.env.FRONTEND_URL || "http://localhost:5173"}/reset-passwprd?token=${token}`;
+
+    const mailOptions = {
+      from: ' "Denuncia Ciudadana" <no-reply@denunciaCiudadana.gov.ar>',
+      to,
+      subject: 'Recuperación de contraseña',
+      html: `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <style>
+          .btn-primary {
+            background-color: #c57b57;
+            color: #fff;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            display: inline-block;
+            margin: 20px 0;
+          }
+        </style>
+      </head>
+      <body style="margin: 0; padding: 0; font-family: 'Inter', sans-serif; background-color: #fcf9f6; color: #4a3f35;">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td align="center" style="padding: 40px 20px;">
+              <table width="100%" style="max-width: 600px; background-color: #ffffff; border-radius: 24px; border: 1px solid #e6dcd1; overflow: hidden;">
+                <tr>
+                  <td align="center" style="padding: 40px;">
+                    <h1 style="margin: 0; font-size: 24px; color: #c57b57;">Recuperar Contraseña</h1>
+                    <p style="margin-top: 20px; line-height: 1.6;">Has solicitado restablecer tu contraseña. Haz clic en el botón de abajo para continuar. Este enlace expirará en 15 minutos.</p>
+                    <a href="${resetUrl}" class="btn-primary">Restablecer Contraseña</a>
+                    <p style="margin-top: 20px; font-size: 14px; color: #857a70;">Si no solicitaste este cambio, puedes ignorar este correo de forma segura.</p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </body>
+      </html>
+      `,
+    };
+
+    try{
+      if(!process.env.EMAIL_USER || !process.env.EMAIL_PASS){
+        console.log("[EMAIL SERVICE] Mock reset link:", resetUrl);
+        return;
+      
+      }
+      await this.transporter.sendMail(mailOptions);
+    }catch (error){
+      console.error("[EMAIL SERVICE] Error enviando email de recuperación:", error);
+    }
+  }
 }
 
 export const emailService = new EmailService();
