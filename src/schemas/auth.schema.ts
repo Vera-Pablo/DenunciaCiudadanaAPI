@@ -13,5 +13,16 @@ export const registerSchema = z.object({
   telefono: z.string().min(7).max(15),
 });
 
+export const forgotPasswordSchema = z.object({
+  email: z.email({message: "Email inválido"}).max(100),
+});
+
+export const resetPasswordSchema = z.object({
+  token: z.string().min(1, "El token es requerido"),
+  newPassword: z.string().min(6, "La contraseña debe tener al menos 6 caracteres").max(100),
+});
+
 export type LoginInput = z.infer<typeof loginSchema>;
 export type RegisterInput = z.infer<typeof registerSchema>;
+export type ForgotPasswordInput = z.infer<typeof forgotPasswordSchema>;
+export type ResetPasswordInput = z.infer<typeof resetPasswordSchema>;
