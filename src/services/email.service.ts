@@ -112,8 +112,8 @@ class EmailService {
     }
   }
 
-  async sendPasswordResetEmail(to: string, token: string){
-    const resetUrl = `${process.env.FRONTEND_URL || "http://localhost:5173"}/reset-passwprd?token=${token}`;
+  async sendPasswordResetEmail(to: string, token: string) {
+    const resetUrl = `${process.env.FRONTEND_URL || "http://localhost:5173"}/reset-password?token=${token}`;
 
     const mailOptions = {
       from: ' "Denuncia Ciudadana" <no-reply@denunciaCiudadana.gov.ar>',
@@ -159,14 +159,21 @@ class EmailService {
       `,
     };
 
-    try{
-      if(!process.env.EMAIL_USER || !process.env.EMAIL_PASS){
-        console.log("[EMAIL SERVICE] Mock reset link:", resetUrl);
+    try {
+      // test in console.log
+      console.log("\n============================================");
+      console.log("🔗 LINK DE RECUPERACIÓN GENERADO:");
+      console.log(resetUrl);
+      console.log("============================================\n");
+
+      // test with credentials.
+      if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+        console.log("[EMAIL SERVICE] Variables de entorno vacías. Correo NO enviado.");
         return;
-      
       }
       await this.transporter.sendMail(mailOptions);
-    }catch (error){
+      console.log(`[EMAIL SERVICE] Email de recuperación enviado exitosamente a ${to}`);
+    } catch (error) {
       console.error("[EMAIL SERVICE] Error enviando email de recuperación:", error);
     }
   }
