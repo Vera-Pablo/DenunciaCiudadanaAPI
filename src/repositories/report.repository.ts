@@ -35,6 +35,12 @@ class ReportRepository {
         type: true,
         status: true,
         user: { select: { name: true, email: true } },
+        comments: {
+          orderBy: { date: "desc" },
+          include: {
+            user: { select: { name: true, role: true } }
+          }
+        }
       },
     });
   }
@@ -57,6 +63,12 @@ class ReportRepository {
       include: {
         type: true,
         status: true,
+        comments: {
+          orderBy: { date: "desc" },
+          include: {
+            user: { select: { name: true, role: true } }
+          }
+        }
       },
       orderBy: { date: "desc" },
     });
