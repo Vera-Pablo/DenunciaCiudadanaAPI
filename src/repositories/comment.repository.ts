@@ -5,7 +5,7 @@ class CommentRepository {
     return await prisma.comment.create({
       data,
       include: {
-        user: { select: { name: true, role: true } },
+        user: { select: { id_user: true, name: true, role: true } },
       },
     });
   }
@@ -15,7 +15,7 @@ class CommentRepository {
       where: { id_report },
       orderBy: { date: "asc" },
       include: {
-        user: { select: { name: true, role: true } },
+        user: { select: { id_user: true, name: true, role: true } },
       },
     });
   }

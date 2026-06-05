@@ -20,7 +20,8 @@ class CommentController {
       const validated = createCommentSchema.parse(req.body);
 
       const userId = req.user?.id_user;
-      if (!userId) {
+      const userRole = req.user?.role;
+      if (!userId || !userRole) {
         return res
           .status(401)
           .json({
@@ -32,9 +33,16 @@ class CommentController {
       const newComment = await commentService.addComment(id, {
         ...validated,
         id_user: userId,
+        role: userRole,
       });
       res.status(201).json({ status: "success", data: newComment });
-    } catch (error) {
+    } catch (error: any) {
+      if (error.message === "FORBIDDEN") {
+        return res.status(403).json({
+          status: "error",
+          message: "No tienes permiso para comentar en esta denuncia",
+        });
+      }
       next(error);
     }
   }
