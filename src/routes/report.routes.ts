@@ -3,6 +3,7 @@ import { reportController } from "../controllers/report.controller.js";
 import { commentController } from "../controllers/comment.controller.js";
 import { authenticateToken } from "../middlewares/auth.middleware.js";
 import { authorizeRoles } from "../middlewares/role.middleware.js";
+import { id } from "zod/locales";
 
 const router = Router();
 
@@ -23,11 +24,12 @@ router.patch(
   reportController.updateStatus,
 );
 
-router.get("/reports/:id/comments", commentController.listByReport);
+router.get("/reports/:id/comments", authenticateToken, commentController.listByReport);
 router.post(
   "/reports/:id/comments",
   authenticateToken,
   commentController.create,
 );
+
 
 export default router;

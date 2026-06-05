@@ -15,15 +15,19 @@ class ReportRepository {
   async findAll(filters: { id_type?: number | undefined; id_status?: number | undefined }) {
     return await prisma.report.findMany({
       where: {
-        AND: [
-          filters.id_type ? { id_type: filters.id_type } : {},
-          filters.id_status ? { id_status: filters.id_status } : {},
-        ],
+        ...(filters.id_type ? { id_type: filters.id_type } : {}),
+        ...(filters.id_status ? { id_status: filters.id_status } : {}),
       },
       include: {
         type: true,
         status: true,
         user: { select: { name: true, email: true } },
+        comments: {
+          orderBy: { date: "desc" },
+          include: {
+            user: { select: { name: true, role: true } }
+          }
+        }
       },
     });
   }
