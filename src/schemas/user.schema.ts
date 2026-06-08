@@ -13,5 +13,11 @@ export const updateUserSchema = createUserSchema.partial().extend({
   is_active: z.boolean().optional(),
 });
 
+export const updateProfileSchema = z.strictObject({
+  name: z.string().min(2).max(50).optional(),
+  telefono: z.string().min(7).max(15).optional(),
+});
+
 export type CreateUserInput = z.infer<typeof createUserSchema>;
 export type UpdateUserInput = z.infer<typeof updateUserSchema>;
+export type UpdateProfileInput = z.infer<typeof updateProfileSchema>;

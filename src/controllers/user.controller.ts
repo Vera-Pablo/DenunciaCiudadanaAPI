@@ -1,6 +1,6 @@
 import type { Request, Response, NextFunction } from "express";
 import { userService } from "../services/user.service.js";
-import { createUserSchema, updateUserSchema } from "../schemas/user.schema.js";
+import { createUserSchema, updateUserSchema, updateProfileSchema } from "../schemas/user.schema.js";
 import { idParamSchema } from "../schemas/common.schema.js";
 
 class UserController {
@@ -8,6 +8,39 @@ class UserController {
     try {
       const users = await userService.getAllUsers();
       res.status(200).json({ status: "success", data: users });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async getMyProfile(req: Request, res: Response, next: NextFunction) {
+    try {
+      const userId = req.user?.id_user;
+      if (!userId) {
+        return res.status(401).json({
+          status: "error",
+          message: "No autorizado: Falta información del usuario en el token",
+        });
+      }
+      const user = await userService.getUserById(userId);
+      res.status(200).json({ status: "success", data: user });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async updateMyProfile(req: Request, res: Response, next: NextFunction) {
+    try {
+      const userId = req.user?.id_user;
+      if (!userId) {
+        return res.status(401).json({
+          status: "error",
+          message: "No autorizado: Falta información del usuario en el token",
+        });
+      }
+      const validated = updateProfileSchema.parse(req.body);
+      const updatedUser = await userService.updateUser(userId, validated);
+      res.status(200).json({ status: "success", data: updatedUser });
     } catch (error) {
       next(error);
     }
