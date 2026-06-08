@@ -3,7 +3,6 @@ import { reportController } from "../controllers/report.controller.js";
 import { commentController } from "../controllers/comment.controller.js";
 import { authenticateToken } from "../middlewares/auth.middleware.js";
 import { authorizeRoles } from "../middlewares/role.middleware.js";
-import { id } from "zod/locales";
 
 const router = Router();
 
@@ -14,6 +13,7 @@ router.get(
   authorizeRoles("Autoridad"),
   reportController.getAll,
 );
+router.get("/reports/stats", authenticateToken, authorizeRoles("Autoridad"), reportController.getStats);
 router.get("/reports/me", authenticateToken, reportController.getMyReports);
 router.get("/reports/:id", reportController.getOne);
 router.post("/reports", authenticateToken, reportController.create);
@@ -30,6 +30,5 @@ router.post(
   authenticateToken,
   commentController.create,
 );
-
 
 export default router;

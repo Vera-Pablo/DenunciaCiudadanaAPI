@@ -87,6 +87,21 @@ class ReportService {
     return result;
   }
 
+  async getStats() {
+    const reports = await reportRepository.getStatsData();
+
+    const total = reports.length;
+    const byStatus: Record<string, number> = {};
+    const byType: Record<string, number> = {};
+
+    for (const r of reports) {
+      byStatus[r.status.type_status] = (byStatus[r.status.type_status] || 0) + 1;
+      byType[r.type.type] = (byType[r.type.type] || 0) + 1;
+    }
+
+    return { total, byStatus, byType };
+  }
+
   async getReportsByUser(userId: number) {
     return await reportRepository.findByUserId(userId);
   }
