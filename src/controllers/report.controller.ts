@@ -62,6 +62,15 @@ class ReportController {
     }
   }
 
+  async getStats(req: Request, res: Response, next: NextFunction) {
+    try {
+      const stats = await reportService.getStats();
+      res.status(200).json({ status: "success", data: stats });
+    } catch (error) {
+      next(error);
+    }
+  }
+
   async getMyReports(req: Request, res: Response, next: NextFunction) {
     try {
       const userId = req.user?.id_user;

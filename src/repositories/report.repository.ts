@@ -61,6 +61,15 @@ class ReportRepository {
     });
   }
 
+  async getStatsData() {
+    return await prisma.report.findMany({
+      select: {
+        status: { select: { type_status: true } },
+        type: { select: { type: true } },
+      },
+    });
+  }
+
   async findByUserId(userId: number) {
     return await prisma.report.findMany({
       where: { id_user: userId },
