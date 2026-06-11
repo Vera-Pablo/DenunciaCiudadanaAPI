@@ -76,6 +76,7 @@ class ReportRepository {
       include: {
         type: true,
         status: true,
+        user: { select: { name: true, email: true } },
         comments: {
           orderBy: { date: "desc" },
           include: {
