@@ -38,12 +38,23 @@ vi.mock("../../config/db.js", () => ({
   },
 }));
 
+const { parse } = vi.hoisted(() => ({
+  parse: vi.fn<(data: any) => any>(),
+}));
+
+vi.mock("../../schemas/report.schema.js", () => ({
+  createReportSchema: {
+    parse,
+  },
+}));
+
 import { reportRepository } from "../../repositories/report.repository.js";
 import { prisma } from "../../config/db.js";
 
 describe("CU1: createReport", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    parse.mockImplementation((data) => data);
   });
 
   it("T1.1 — Curso normal: todos los campos completos, usuario autenticado", async () => {
@@ -68,9 +79,8 @@ describe("CU1: createReport", () => {
   });
 
   it("T1.2 — Campos vacíos: falta description", async () => {
-    vi.mocked(prisma.status.findUnique).mockResolvedValue({
-      id_status: 1,
-      type_status: "Pendiente",
+    parse.mockImplementation(() => {
+      throw new Error("debe tener al menos 10 caracteres");
     });
 
     await expect(
@@ -115,7 +125,7 @@ describe("CU1: createReport", () => {
         street_number: 742,
         id_user: undefined as unknown as number,
       }),
-    ).rejects.toThrow();
+    ).rejects.toThrow("Usuario no autenticado");
   });
 
   it("T1.5 — Error DB: repository.create falla", async () => {
