@@ -1,8 +1,9 @@
 import { reportRepository } from "../repositories/report.repository.js";
 import { prisma } from "../config/db.js";
-import type {
-  CreateReportInput,
-  UpdateReportStatusInput,
+import {
+  createReportSchema,
+  type CreateReportInput,
+  type UpdateReportStatusInput,
 } from "../schemas/report.schema.js";
 import { commentRepository } from "../repositories/comment.repository.js";
 import { emailService } from "./email.service.js";
@@ -22,6 +23,9 @@ class ReportService {
   }
 
   async createReport(data: CreateReportInput & { id_user: number }) {
+    createReportSchema.parse(data);
+    if (!data.id_user) throw new Error("Usuario no autenticado");
+
     const tracking_num = this.generateTrackingNum();
 
     const pendingStatus = await prisma.status.findUnique({
