@@ -6,6 +6,8 @@
   "scripts": {
     "test": "vitest run --reporter verbose",
     "test:watch": "vitest",
+    "clean": "tsx prisma/clean.ts",
+    "fresh": "tsx prisma/clean.ts && tsx prisma/seed.ts",
     "dev": "tsx watch ./src/server.ts"
   },
   "repository": {
