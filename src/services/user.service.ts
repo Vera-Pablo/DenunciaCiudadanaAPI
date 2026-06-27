@@ -18,7 +18,7 @@ class UserService {
     return UserMapper.toSanitizedUser(user);
   }
 
-  async createUser(data: CreateUserInput & { id_role: number }) {
+  async createUser(data: CreateUserInput) {
     const existingDni = await userRepository.getByDni(data.dni);
     if (existingDni) {
       throw new Error("El DNI ya está registrado");

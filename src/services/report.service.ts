@@ -22,9 +22,9 @@ class ReportService {
     return report;
   }
 
-  async createReport(data: CreateReportInput & { id_user: number }) {
+  async createReport(data: CreateReportInput, id_user: number) {
     createReportSchema.parse(data);
-    if (!data.id_user) throw new Error("Usuario no autenticado");
+    if (!id_user) throw new Error("Usuario no autenticado");
 
     const tracking_num = this.generateTrackingNum();
 
@@ -34,7 +34,7 @@ class ReportService {
     if (!pendingStatus)
       throw new Error("Estado por defecto 'Pendiente' no encontrado");
 
-    const { id_type, id_user, ...rest } = data;
+    const { id_type, ...rest } = data;
 
     return await reportRepository.create({
       ...rest,

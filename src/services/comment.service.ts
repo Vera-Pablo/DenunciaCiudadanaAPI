@@ -3,16 +3,16 @@ import { reportRepository } from "../repositories/report.repository.js";
 import type { CreateCommentInput } from "../schemas/comment.schema.js";
 
 class CommentService {
-  async addComment(id_report: number, data: CreateCommentInput & { id_user: number; role: string }) {
+  async addComment(id_report: number, data: CreateCommentInput, userId: number, role: string) {
     const report = await reportRepository.findById(id_report);
     if (!report) throw new Error("Denuncia no encontrada");
 
-    if (data.role !== "Autoridad" && report.id_user !== data.id_user) {
+    if (role !== "Autoridad" && report.id_user !== userId) {
       throw new Error("FORBIDDEN");
     }
     return await commentRepository.create({
       id_report,
-      id_user: data.id_user,
+      id_user: userId,
       text: data.text,
     });
   }

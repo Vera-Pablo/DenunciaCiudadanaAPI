@@ -64,13 +64,15 @@ describe("CU1: createReport", () => {
     });
     vi.mocked(reportRepository.create).mockResolvedValue(mockReport);
 
-    const result = await reportService.createReport({
-      id_type: 1,
-      description: "Test description",
-      street: "Av. Siempre Viva",
-      street_number: 742,
-      id_user: 1,
-    });
+    const result = await reportService.createReport(
+      {
+        id_type: 1,
+        description: "Test description",
+        street: "Av. Siempre Viva",
+        street_number: 742,
+      },
+      1,
+    );
 
     expect(result).toBeDefined();
     expect(result).toHaveProperty("tracking_num");
@@ -84,13 +86,15 @@ describe("CU1: createReport", () => {
     });
 
     await expect(
-      reportService.createReport({
-        id_type: 1,
-        description: "abc",
-        street: "Av. Siempre Viva",
-        street_number: 742,
-        id_user: 1,
-      }),
+      reportService.createReport(
+        {
+          id_type: 1,
+          description: "abc",
+          street: "Av. Siempre Viva",
+          street_number: 742,
+        },
+        1,
+      ),
     ).rejects.toThrow("debe tener al menos 10 caracteres");
   });
 
@@ -104,13 +108,15 @@ describe("CU1: createReport", () => {
       img_url: null,
     });
 
-    const result = await reportService.createReport({
-      id_type: 1,
-      description: "Descripción válida de más de 10 caracteres",
-      street: "Av. Siempre Viva",
-      street_number: 742,
-      id_user: 1,
-    });
+    const result = await reportService.createReport(
+      {
+        id_type: 1,
+        description: "Descripción válida de más de 10 caracteres",
+        street: "Av. Siempre Viva",
+        street_number: 742,
+      },
+      1,
+    );
 
     expect(result).toBeDefined();
     expect(result.img_url).toBeNull();
@@ -118,13 +124,15 @@ describe("CU1: createReport", () => {
 
   it("T1.4 — No autenticado: el service no recibe id_user", async () => {
     await expect(
-      reportService.createReport({
-        id_type: 1,
-        description: "Descripción válida larga",
-        street: "Av. Siempre Viva",
-        street_number: 742,
-        id_user: undefined as unknown as number,
-      }),
+      reportService.createReport(
+        {
+          id_type: 1,
+          description: "Descripción válida larga",
+          street: "Av. Siempre Viva",
+          street_number: 742,
+        },
+        undefined as unknown as number,
+      ),
     ).rejects.toThrow("Usuario no autenticado");
   });
 
@@ -138,13 +146,15 @@ describe("CU1: createReport", () => {
     );
 
     await expect(
-      reportService.createReport({
-        id_type: 1,
-        description: "Descripción válida para el test",
-        street: "Av. Siempre Viva",
-        street_number: 742,
-        id_user: 1,
-      }),
+      reportService.createReport(
+        {
+          id_type: 1,
+          description: "Descripción válida para el test",
+          street: "Av. Siempre Viva",
+          street_number: 742,
+        },
+        1,
+      ),
     ).rejects.toThrow("Database error");
   });
 });

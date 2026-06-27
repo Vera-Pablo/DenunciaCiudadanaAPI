@@ -30,11 +30,7 @@ class CommentController {
           });
       }
 
-      const newComment = await commentService.addComment(id, {
-        ...validated,
-        id_user: userId,
-        role: userRole,
-      });
+      const newComment = await commentService.addComment(id, validated, userId, userRole);
       res.status(201).json({ status: "success", data: newComment });
     } catch (error: any) {
       if (error.message === "FORBIDDEN") {

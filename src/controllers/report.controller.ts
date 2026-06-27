@@ -34,10 +34,7 @@ class ReportController {
       const userId = req.user?.id_user;
       if (!userId) throw new Error("Usuario no autenticado");
 
-      const newReport = await reportService.createReport({
-        ...validated,
-        id_user: userId,
-      });
+      const newReport = await reportService.createReport(validated, userId);
       res.status(201).json({ status: "success", data: newReport });
     } catch (error) {
       next(error);

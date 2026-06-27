@@ -72,11 +72,12 @@ describe("CU4: addComment", () => {
     });
     vi.mocked(commentRepository.create).mockResolvedValue(mockComment);
 
-    const result = await commentService.addComment(1, {
-      text: "Nuevo mensaje",
-      id_user: 1,
-      role: "Ciudadano",
-    });
+    const result = await commentService.addComment(
+      1,
+      { text: "Nuevo mensaje" },
+      1,
+      "Ciudadano",
+    );
 
     expect(result).toBeDefined();
     expect(result.text).toBe("Nuevo mensaje");
@@ -92,11 +93,12 @@ describe("CU4: addComment", () => {
       user: { name: "Authority", id_user: 3, role: { id_role: 2, type_role: "Autoridad" } },
     });
 
-    const result = await commentService.addComment(1, {
-      text: "Respuesta oficial",
-      id_user: 3,
-      role: "Autoridad",
-    });
+    const result = await commentService.addComment(
+      1,
+      { text: "Respuesta oficial" },
+      3,
+      "Autoridad",
+    );
 
     expect(result).toBeDefined();
   });
@@ -116,11 +118,12 @@ describe("CU4: addComment", () => {
     vi.mocked(reportRepository.findById).mockResolvedValue(null);
 
     await expect(
-      commentService.addComment(999, {
-        text: "test",
-        id_user: 1,
-        role: "Ciudadano",
-      }),
+      commentService.addComment(
+        999,
+        { text: "test" },
+        1,
+        "Ciudadano",
+      ),
     ).rejects.toThrow("Denuncia no encontrada");
   });
 
@@ -131,11 +134,12 @@ describe("CU4: addComment", () => {
     });
 
     await expect(
-      commentService.addComment(1, {
-        text: "test",
-        id_user: 1,
-        role: "Ciudadano",
-      }),
+      commentService.addComment(
+        1,
+        { text: "test" },
+        1,
+        "Ciudadano",
+      ),
     ).rejects.toThrow("FORBIDDEN");
   });
 
@@ -146,11 +150,12 @@ describe("CU4: addComment", () => {
     });
     vi.mocked(commentRepository.create).mockResolvedValue(mockComment);
 
-    const result = await commentService.addComment(1, {
-      text: "Respuesta",
-      id_user: 3,
-      role: "Autoridad",
-    });
+    const result = await commentService.addComment(
+      1,
+      { text: "Respuesta" },
+      3,
+      "Autoridad",
+    );
 
     expect(result).toBeDefined();
     expect(commentRepository.create).toHaveBeenCalledTimes(1);
